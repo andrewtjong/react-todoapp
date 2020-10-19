@@ -1,62 +1,44 @@
-import React from "react";
-import TodoItem from "./components/TodoItem";
-import todosData from "./todosData";
+import React from "react"
+import TodoItem from "./components/TodoItem"
+import todosData from "./todosData"
 
 class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      todoItems: todosData.map((item) => (
-        <TodoItem key={item.id} item={item} />
-      )),
-    };
-  }
-  render() {
-    return <div className="todo-list">{this.state.todoItems}</div>;
-  }
+    constructor() {
+        super()
+        this.state = {
+            todos: todosData
+        }
+        this.handleChange = this.handleChange.bind(this)
+    }
+    
+    handleChange(id) {
+      this.setState(prevState => {
+        const updatedTodos = prevState.todos.map(todo => {
+          if (todo.id === id) {
+           return {
+             ...todo,
+             completed: !todo.completed
+           }
+          }
+          return todo
+        })
+        return {
+          todos: updatedTodos
+        }
+      })
+      
+    }
+    
+    render() {
+        const todoItems = this.state.todos.map(item => <TodoItem key={item.id} item={item}
+        handleChange={this.handleChange}/>)
+        
+        return (
+            <div className="todo-list">
+                {todoItems}
+            </div>
+        )    
+    }
 }
 
-export default App;
-
-// import React from "react";
-// import TodoItem from "./components/TodoItem";
-// import todosData from "./todosData";
-
-// class App extends React.Component {
-//   constructor() {
-//     super();
-//     this.state = {
-//       todosItems: todosData.map((item) => (
-//         <TodoItem key={item.id} item={item} />
-//       )),
-//     };
-//   }
-//   render() {
-//     return (
-//       <div className="todo-list">
-//         <p>{this.state.todosItems}</p>
-//       </div>
-//     );
-//   }
-// }
-
-// function App() {
-//   const todosItems = todosData.map((item) => (
-//     <TodoItem key={item.id} item={item} />
-//   ));
-//   return <div className="todo-list">{todosItems}</div>;
-// }
-
-// const todosList = todosData.map((todo) => (
-//   <TodoItem key={todo.id} text={todo.text} completed={todo.completed} />
-// ));
-
-// return <div className="todo-list">{todosList}</div>;
-// }
-// export default App;
-
-// const jokeComponents = jokesData.map((joke) => (
-//   <Joke key={joke.id} question={joke.question} punchJoke={joke.punchLine} />
-// ));
-
-// return <div>{jokeComponents}</div>;
+export default App
